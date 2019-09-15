@@ -9,6 +9,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
 /**
  * Copyright (c) 2015 Tim Lindquist, Software Engineering, Arizona State
  * University at the Polytechnic campus
@@ -43,7 +46,7 @@ import java.io.PrintWriter;
  * @date July, 2015
  **/
 
-public class Message implements java.io.Serializable {
+public class Message implements MessageLibrary, Serializable {
 
 	private static final long serialVersionUID = -8353937001320001715L;
 	
@@ -122,6 +125,48 @@ public class Message implements java.io.Serializable {
 		catch (IOException e) {
 			System.out.println("An I/O Error Occurred");
 			System.exit(0);
+		}
+		
+		@Override
+		public boolean sendClearText(Message aMessage, String fromUser) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+		@Override
+		public boolean sendCipher(Message aMessage, String fromUser) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+		@Override
+		public String[] getMessageFromHeaders(String toAUserName) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+
+		@Override
+		public Message getMessage(String header) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+
+		@Override
+		public boolean deleteMessage(String header, String toAUserName) {
+			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theView.tree.getSelectionPath()
+					.getLastPathComponent();
+
+			if (selectedNode != theView.tree.getModel().getRoot()) {
+				DefaultTreeModel model = (DefaultTreeModel) theView.tree.getModel();
+
+				model.removeNodeFromParent(selectedNode);
+				model.reload();
+			}
+			return false;
 		}
 	}
 }

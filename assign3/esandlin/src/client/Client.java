@@ -160,21 +160,16 @@ public class Client {
 				 * This is for Deleting nodes
 				 */
 				if (e.getActionCommand().equals("Delete")) {
-					DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theView.tree.getSelectionPath()
-							.getLastPathComponent();
-
-					if (selectedNode != theView.tree.getModel().getRoot()) {
-						DefaultTreeModel model = (DefaultTreeModel) theView.tree.getModel();
-
-						model.removeNodeFromParent(selectedNode);
-						model.reload();
-					}
-
-					/*
-					 * This is for creating new nodes
-					 */
+					
+					// deletes the message having the header (from user name - server and message date)
+				    public boolean deleteMessage(String header, String toAUserName);
+					
 				} else if (e.getActionCommand().equals("Reply")) {
-
+					
+					// do not implement sendClearText in Assign2.
+				    public boolean sendClearText(Message aMessage, String fromUser);
+					
+					/*
 					DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theView.tree.getSelectionPath()
 							.getLastPathComponent();
 
@@ -185,16 +180,27 @@ public class Client {
 					// reload jtree model
 					DefaultTreeModel model = (DefaultTreeModel) theView.tree.getModel();
 					model.reload();
-					/*
+					
 					 * todo
 					 */
 				} else if (e.getActionCommand().equals("Send Text")) {
+					
+				    // getMessageFromHeaders returns a string array of message headers being sent to toAUserName.
+				    // Headers returned are of the form: (from user name @ server and message date)
+				    // e.g., a message from J Buffett with header: Jimmy.Buffet  Tue 18 Dec 5:32:29 2018
+				    public String[] getMessageFromHeaders(String toAUserName);
 
-					/*
-					 * todo
-					 */
+				    // getMessage returns the Message having the corresponding header. Assume headers are unique.
+				    // As above, the header has includes (from user name - server and message date)
+				    public Message getMessage(String header);
+
+				    
+				    
 				} else if (e.getActionCommand().equals("Send Cipher")) {
 
+					// do not implement sendCipher in Assign2.
+				    public boolean sendCipher(Message aMessage, String fromUser);
+				    
 				}
 
 			} catch (NumberFormatException ex) {
