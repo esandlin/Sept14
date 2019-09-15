@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project name="Ser321 Assignment3." default="targets" basedir="."
+<project name="assign3." default="targets" basedir="."
          xmlns:dn="antlib:org.apache.ant.dotnet"
          xmlns="antlib:org.apache.tools.ant"
          xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">
 
    <property name="src.dir" value="src/client"/>
    <property name="build.dir"   value="build"/>
-   <property name="classes.dir" value="${build.dir}/classes"/>
+   <property name="classes.dir" value="${build.dir}/classes/ser321/assign3/esandlin/client/"/>
    <property name="jar.dir"     value="${build.dir}/jar"/>
+	<property name="main-class"  value="src.client.Client"/>
    <property environment="env"/>
    <property name="user" value="${env.USERNAME}"/>      
 	   
-
    <target name="targets">
       <echo message="Targets are clean, prepare, build, execute, and targets"/>
    </target>
@@ -20,9 +20,17 @@
    <path id="compile.classpath">
       <pathelement location="${build}"/>
    </path>
-
+	
+	<!-- Using external libraries--> 
+	<path id="classpath">
+	        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+	    </path>
+	
+	<!-- Creates the  build, docs and libs directory--> 
    <target name="prepare">
       <mkdir dir="${build}" />
+      <mkdir dir="${docs.dir}" />     
+      <mkdir dir="${libs.dir}" /> 
    </target>
 	
 <!-- Deletes the existing build, docs and dist directory-->  
@@ -39,6 +47,26 @@
          <classpath refid="compile.classpath"/>
       </javac>
    </target>
+	
+	<target name="jar" depends="build">
+	        <jar destfile="${libs.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+	            <manifest>
+	                <attribute name="Main-Class" value="${main-class}"/>
+	            </manifest>
+	        </jar>
+	</target>
+	
+	<target name="run" depends="jar">
+	        <java jar="${libs.dir}/${ant.project.name}.jar" fork="true" classname="${main-class}"/>
+		<classpath>
+		          <path refid="classpath"/>
+		          <path location="${libs.dir}/${ant.project.name}.jar"/>
+		</classpath>
+	</target>
+
+	    <target name="clean-build" depends="clean,jar"/>
+
+	    <target name="main" depends="clean,run"/>
 
    <target name="execute" depends="build"
            description="Run the program">
