@@ -1,180 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
- <project basedir="." default="compile" name="Ser321 Basic Rmi Example"> 
-<!--
-targets, clean, prepare, compile, server, and client.
--->
-	<!-- set global properties for this build -->
-<property name="src.dir"     value="src"/>
-<property name="build.dir" value="classes" />
-<property name="classes.dir" value="${build.dir}/classes"/>
-<property name="jar.dir"     value="${build.dir}/jar"/>
-<property name="lib.dir" value="lib" />
-<property name="hostId" value="localhost" />
-<property name="regPort" value="1099" />
-<property name="main-class"  value="EchoServer"/>
-<property environment="env" />
-<property name="debuglevel" value="source,lines,vars" />
-<property name="target" value="1.8" />
-<property name="source" value="1.8" />
+<project name="Ser321 Assignment3." default="targets" basedir="."
+         xmlns:dn="antlib:org.apache.ant.dotnet"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">
 
+   <property name="src.dir" value="src/client"/>
+   <property name="build.dir"   value="build"/>
+   <property name="classes.dir" value="${build.dir}/classes"/>
+   <property name="jar.dir"     value="${build.dir}/jar"/>
+   <property environment="env"/>
+   <property name="user" value="${env.USERNAME}"/>      
+	   
 
-<target name="clean">
-    <delete dir="${build.dir}"/>
-</target>
+   <target name="targets">
+      <echo message="Targets are clean, prepare, build, execute, and targets"/>
+   </target>
 
-<target name="compile">
-    <mkdir dir="${classes.dir}"/>
-    <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false"/>
-</target>
+   <path id="compile.classpath">
+      <pathelement location="${build}"/>
+   </path>
 
-<target name="jar" depends="compile">
-    <mkdir dir="${jar.dir}"/>
-    <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
-        <manifest>
-            <attribute name="Main-Class" value="${main-class}"/>
-        </manifest>
-    </jar>
-</target>
-
-<target name="run" depends="jar">
-    <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
-</target>
-
-<target name="clean-build" depends="clean,jar"/>
-
-<target name="main" depends="clean,run"/>
-
-<target name="run-server" depends="jar">
-    <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
-</target>
-
-<target name="run-client" depends="jar">
-    <java classname="EchoClient" fork="true">
-      <classpath>
-        <pathelement location="${jar.dir}/${ant.project.name}.jar"/>
-      </classpath>
-    </java>
-</target>
+   <target name="prepare">
+      <mkdir dir="${build}" />
+   </target>
 	
-	<!-- set global properties for this build -->
-	<path id="Assign3.classpath">
-		<pathelement location="bin" />
-	</path>
-
-	<!-- classpath  -->
-	<path id="compile.classpath">
-		<pathelement location="${build}" />
-	</path>
-
-
-
-	<!-- checks the OS  -->
-	<target name="checkos">
-		<condition property="os" value="windows">
-			<os family="windows" />
-		</condition>
-		<condition property="os" value="unix">
-			<os family="unix" />
-		</condition>
-		<condition property="os" value="mac">
-			<os family="mac" />
-		</condition>
-	</target>
-	<target name="targets" depends="checkos">
-		<echo message="targets are clean, prepare, compile, server, client" />
-		<echo message="java home is: ${java.home}" />
-		<echo message="os family is: ${os}" />
-		<echo>start server with: ant server -DhostId=192.168.2.2 -DregPort=2222</echo>
-		<echo>start client with: ant client -DhostId=192.168.2.2 -DregPort=2222 </echo>
-	</target>
-
-	<!-- default launch  -->
-	<target name="init">
-		<mkdir dir="bin" />
-		<copy includeemptydirs="false" todir="bin">
-			<fileset dir="src">
-				<exclude name="**/*.launch" />
-				<exclude name="**/*.java" />
-			</fileset>
-		</copy>
-	</target>
-
-	<!-- Delete the ${build} directory tree 
-	<target name="clean">
-		<delete dir="bin" />
-		<delete dir="${build}" />
-	</target>
-	<target depends="clean" name="cleanall" />
-	<target depends="build-subprojects,build-project" name="build" />
--->
-
-	<!-- default build  -->
-	<target name="build-subprojects" />
-	<target depends="init" name="build-project">
-		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-			<src path="src" />
-			<classpath refid="Assign3.classpath" />
-		</javac>
-	</target>
-	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
+<!-- Deletes the existing build, docs and dist directory-->  
+   <target name="clean">
+      <delete dir="${build}" failonerror="false"/>
+   	  <delete dir="${docs}" failonerror="false"/>      
+      <delete dir="${libs}" failonerror="false"/>  
+   </target>
 	
-	<!-- Time stamp & make build dir  -->
-	<target name="prepare">
-	      <!-- Create the time stamp -->
-	      <tstamp/>
-	      <!-- Create the build directory structure used by compile -->
-	      <echo message="home defined as: ${home}" />
-	      <mkdir dir="${build}" />
-	   </target>
-	
-	<!-- Compiles  
-	<target name="compile" depends="prepare"
-	           description="Compile Java sources">
-	      <javac srcdir="${src}"
-	             includeantruntime="false"
-	             destdir="${build}">
-	         <classpath refid="compile.classpath"/>
-	      </javac>
-	     <rmic classname="personnel.EmpServerImpl" base="${build}">
-	             <classpath refid="compile.classpath"/>
-	          </rmic> 
-	   </target>
-	-->
-	<!-- Network and Server  -->
-	<target name="client" depends="compile"
-	           description="Start client">
-	         <echo message="user.dir is: ${user.dir}"/>
-	         <echo message="command line client: java -cp classes -Djava.security.policy=policyClient RMIClient ${hostId} ${regPort}" />
-	         <java classname="RMIClientGui" fork="yes">
-	           <classpath refid="compile.classpath"/>
-	<!--           <sysproperty key="java.security.policy" value="policyClient"/> -->
-	           <arg value="${hostId}"/> 
-	           <arg value="${regPort}"/>
-	         </java>
-	   </target>
-	
-	<!-- Network and Server  --> 
-	<target name="server" depends="compile"
-	           description="Using parallel task, start server and client">
-	     <parallel>
-	       <exec dir="${basedir}"
-	             executable="rmiregistry">
-	         <arg value="${regPort}"/>
-	         <env key="CLASSPATH" path="${basedir}/${build}"/>
-	       </exec>
-	       <sequential>
-	         <sleep seconds="10"/>
-	         <java classname="personnel.EmpServerImpl" fork="yes">
-	<!--           <sysproperty key="java.security.policy" value="policyServer"/> -->
-	           <sysproperty key="java.rmi.server.hostname" value="${hostId}"/>
-	           <arg value="${hostId}"/> 
-	           <arg value="${regPort}"/> 
-	           <classpath refid="compile.classpath"/>
-	         </java>
-	       </sequential>
-	     </parallel>
-	   </target>
-	
+   <target name="build" depends="prepare">
+      <javac srcdir="${src.dir}"
+             includeantruntime="false"
+             destdir="${build}">
+         <classpath refid="compile.classpath"/>
+      </javac>
+   </target>
+
+   <target name="execute" depends="build"
+           description="Run the program">
+         <echo message="command line execute: java -cp classes Client" />
+         <java classname="Client" fork="yes">
+           <classpath refid="compile.classpath"/>
+         </java>
+   </target>
+
 </project>
