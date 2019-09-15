@@ -34,12 +34,12 @@
 		   </target> 
 				
 		    <target name="compile">
-		        <mkdir dir="${build}/classes"/>
+		        <mkdir dir="build/classes"/>
 		        <javac srcdir="src" destdir="build/classes"/>
 		    </target>
 
 		    <target name="jar">
-		        <mkdir dir="${build}/jar"/>
+		        <mkdir dir="build/jar"/>
 		        <jar destfile="${build}/jar/Client.jar" basedir="${build}/classes">
 		            <manifest>
 		                <attribute name="Main-Class" value="src/client/Client"/>

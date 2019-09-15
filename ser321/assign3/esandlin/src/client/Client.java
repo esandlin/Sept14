@@ -4,12 +4,17 @@ package ser321.assign3.esandlin.client;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.InetAddress;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-
 
 
 /**
@@ -137,34 +142,66 @@ public class Client {
 }
 
 class Main {
-	public static void main(String[] args) {
-		
-			try {
-			// The OSName.java
-			System.out.println(System.getProperty("os.name"));
-			System.out.println(InetAddress.getLocalHost().getCanonicalHostName());
 
-			// The MVC
-			MessageGUI theView = new MessageGUI();
-			Message theModel = new Message();
-			Client theController = new Client(theView, theModel);
-			theView.setVisible(true);
-			
-			String hostId = "$localhost";
-			String regPort = "1099";
-			if (args.length >= 2) {
-				hostId = args[0];
-				regPort = args[1];
-			}
+    // socket object for
+    private static Socket socket;
 
-			System.out.println("Client obtained remote object reference to" + " the Server");
-			BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) {
 
-			// System.setSecurityManager(new RMISecurityManager());
-			// RMIClientGui rmiclient = new RMIClientGui(hostId, regPort);
+        try {
+            // The OSName.java
+            System.out.println(System.getProperty("os.name"));
+            System.out.println(InetAddress.getLocalHost().getCanonicalHostName());
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            // The MVC
+            MessageGUI theView = new MessageGUI();
+            Message theModel = new Message();
+            Client theController = new Client(theView, theModel);
+            theView.setVisible(true);
+
+            String host = "$localhost";
+            int port = 1099;
+            // if (args.length >= 2) {
+            // host = args[0];
+            // port = args[1];
+            // }
+
+            InetAddress address = InetAddress.getByName(host);
+            socket = new Socket(address, port);
+
+            // Send the message to the server
+            OutputStream os = socket.getOutputStream();
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            BufferedWriter bw = new BufferedWriter(osw);
+
+            // String number = "2";
+            //
+            // String sendMessage = number + "\n";
+            // bw.write(sendMessage);
+            // bw.flush();
+            // System.out.println("Message sent to the server : "+sendMessage);
+
+            // Get the return message from the server
+            InputStream is = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            System.out.println("Client obtained remote object reference to" + " the Server");
+            //BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader br = new BufferedReader(isr);
+            String message = br.readLine();
+            System.out.println("Message received from the server : " + message);
+
+            // System.setSecurityManager(new RMISecurityManager());
+            // RMIClientGui rmiclient = new RMIClientGui(host, port);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Closing the socket
+            try {
+                socket.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
