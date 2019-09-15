@@ -46,6 +46,16 @@ import java.io.PrintWriter;
 public class Message implements java.io.Serializable {
 
 	private static final long serialVersionUID = -8353937001320001715L;
+	
+	public Message(Message msg) {
+	    JSONObject jsonObj = new JSONObject();
+	    jsonObj.put("From", msg.getFrom());
+	    jsonObj.put("Date", msg.getFrom());
+	    jsonObj.put("To", msg.getFrom());
+	    jsonObj.put("Subject", msg.getFrom());
+	    jsonObj.put("Message", msg.getFrom());
+	    jsonObj.put("Status", msg.getFrom());
+	}
 
 	/**
 	 * Create the file and the PrintWriter that will write to the file
