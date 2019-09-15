@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="assign 3" basedir="." default="targets">
+
+    <property name="src.dir"     value="src"/>
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+
+    <property name="main-class"  value="src.client.Client"/>
+
+	<!-- defaults to targets -->
+	<target name="targets">
+		   	<echo message="targets are: targets, clean, prepare, compile, execute, server, and client."/>
+		   	  <echo message="java home is: ${java.home}" />
+		   	  <echo message="os family is: ${os}" />
+		   	  <echo>start server with: ant server -DhostId=${currentIP} -DregPort=1099</echo>
+		   	  <echo>start client with: ant client -DhostId=${currentIP} -DregPort=1099 </echo>
+		   	  <echo message="manually run client with: java -cp classes;lib/assign3Gui.jar ser321.assign3.esandlin.client.Client localhost:8080" />
+			  <echo>${user.dir}</echo>
+	</target>
+	 
+<!-- Deletes the existing build, docs and dist directory-->
+    <target name="clean">
+		<delete dir="${build.}" failonerror="false"/>
+	    <delete dir="${docs}" failonerror="false"/>      
+	    <delete dir="${libs}" failonerror="false"/>  
+    </target>
+    	  
+
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+
+    <target name="clean-build" depends="clean,jar"/>
+
+    <target name="main" depends="clean,run">
+		<echo message="targets are: clean, compile, jar, run."/>
+    </target>
+</project>

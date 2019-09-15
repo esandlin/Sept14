@@ -174,7 +174,7 @@ public class Client {
 					 * This is for creating new nodes
 					 */
 				} else if (e.getActionCommand().equals("Reply")) {
-
+					/*
 					DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theView.tree.getSelectionPath()
 							.getLastPathComponent();
 
@@ -185,14 +185,12 @@ public class Client {
 					// reload jtree model
 					DefaultTreeModel model = (DefaultTreeModel) theView.tree.getModel();
 					model.reload();
-					/*
-					 * todo
+					
+					 
 					 */
 				} else if (e.getActionCommand().equals("Send Text")) {
 
-					/*
-					 * todo
-					 */
+					
 				} else if (e.getActionCommand().equals("Send Cipher")) {
 
 				}

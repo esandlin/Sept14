@@ -1,5 +1,8 @@
 package ser321.assign3.esandlin.client;
 
+
+import java.io.Serializable;
+
 /**
  * Copyright (c) 2015 Tim Lindquist,
  * Software Engineering,
@@ -37,7 +40,7 @@ package ser321.assign3.esandlin.client;
  * @date    July, 2015
  **/
 
-public interface MessageLibrary{
+public interface MessageLibrary extends Serializable{
 
     // do not implement sendClearText in Assign2.
     public boolean sendClearText(Message aMessage, String fromUser);
