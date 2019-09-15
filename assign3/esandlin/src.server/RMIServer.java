@@ -1,7 +1,8 @@
-package ser321.assign3.esandlin.src.server;
+package assign3.esandlin.src.server;
 
 import java.rmi.*;
-import java.io.Serializable;
+
+import assign3.esandlin.src.client.Message;
 
 /**
  * Copyright (c) 2019 Tim Lindquist,
@@ -34,7 +35,7 @@ import java.io.Serializable;
  * @license See above
  */
 
-public interface RMIServer extends Remote, Serializable {
+public interface RMIServer extends Remote {
    public ServerClient getEmp(int id) throws RemoteException;
    public ServerClient addEmp(String name) throws RemoteException;
    public String[] getNames() throws RemoteException;
@@ -56,4 +57,5 @@ public interface RMIServer extends Remote, Serializable {
 
    // deletes the message having the header (from user name - server and message date)
    public boolean deleteMessage(String header, String toAUserName);
+
 }

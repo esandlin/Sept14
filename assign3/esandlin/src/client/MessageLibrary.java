@@ -1,5 +1,4 @@
-package ser321.assign3.esandlin.client;
-
+package assign3.esandlin.src.client;
 
 import java.io.Serializable;
 

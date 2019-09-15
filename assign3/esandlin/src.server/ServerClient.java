@@ -1,4 +1,6 @@
-package ser321.assign3.esandlin.server;
+package assign3.esandlin.src.server;
+
+import java.io.Serializable;
 
 /**
  * Copyright (c) 2019 Tim Lindquist,
@@ -30,7 +32,7 @@ package ser321.assign3.esandlin.server;
  * @date    January, 2019
  * @license See above
  */
-public class ServerClient implements java.io.Serializable {
+public class ServerClient implements Serializable {
    /**
 	 * 
 	 */
@@ -50,4 +52,6 @@ public class ServerClient implements java.io.Serializable {
    public int getId() {
       return id;
    }
+   
+   
 }		

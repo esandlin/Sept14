@@ -1,4 +1,4 @@
-package ser321.assign3.esandlin.server;
+package assign3.esandlin.src.server;
 
 import java.rmi.server.*;
 import java.rmi.*;
@@ -24,9 +24,11 @@ import java.net.InetAddress;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import ser321.assign3.esandlin.client.Client;
-import ser321.assign3.esandlin.client.Message;
-import ser321.assign3.esandlin.client.MessageGUI;
+//import ser321.assign3.esandlin.client.Client;
+//import ser321.assign3.esandlin.client.Message;
+//import ser321.assign3.esandlin.client.MessageGUI;
+
+import assign3.esandlin.src.client.Message;
 
 /**
  * Copyright (c) 2019 Tim Lindquist, Software Engineering, Arizona State
@@ -132,7 +134,7 @@ class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
             while(true)
             {
                 //Reading the message from the client
-                socket = serverSocket.accept();
+                //socket = serverSocket.accept();
                 InputStream is = socket.getInputStream();
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr);
@@ -162,11 +164,41 @@ class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
                 bw.flush();
             }
             
-            RMIServer obj = new RMIServerImpl();
-            Naming.rebind("rmi://" + host + ":" + port + "/ClientServer", obj);
-            System.out.println("Server bound in registry as: " + "rmi://" + host + ":" + port + "/ClientServer");
+            //RMIServer obj = new RMIServerImpl();
+            //Naming.rebind("rmi://" + host + ":" + port + "/ClientServer", obj);
+           // System.out.println("Server bound in registry as: " + "rmi://" + host + ":" + port + "/ClientServer");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public boolean sendClearText(Message aMessage, String fromUser) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean sendCipher(Message aMessage, String fromUser) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String[] getMessageFromHeaders(String toAUserName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Message getMessage(String header) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteMessage(String header, String toAUserName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

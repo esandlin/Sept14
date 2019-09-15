@@ -1,4 +1,4 @@
-package ser321.assign3.esandlin.client;
+package assign3.esandlin.src.client;
 
 /**
  * Copyright (c) 2015 Tim Lindquist,
@@ -38,6 +38,7 @@ package ser321.assign3.esandlin.client;
  **/
 
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.swing.*;
@@ -52,7 +53,7 @@ import java.awt.BorderLayout;
  * @author ericsandlin
  *
  */
-public class MessageGUI extends JFrame implements java.io.Serializable {
+public class MessageGUI extends JFrame implements Serializable{
 
     /**
      * Json serialization
