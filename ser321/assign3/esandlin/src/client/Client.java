@@ -1,6 +1,5 @@
 package ser321.assign3.esandlin.client;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -15,7 +14,6 @@ import java.net.InetAddress;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-
 
 /**
  * Copyright (c) 2015 Tim Lindquist, Software Engineering, Arizona State
@@ -53,9 +51,14 @@ import javax.swing.tree.DefaultTreeModel;
 
 public class Client {
 
+	private static Socket socket;
 	private MessageGUI theView;
 	private Message theModel;
-
+	
+	/**
+	 * @param theView
+	 * @param theModel
+	 */
 	public Client(MessageGUI theView, Message theModel) {
 		this.theView = theView;
 		this.theModel = theModel;
@@ -69,17 +72,78 @@ public class Client {
 		this.theView.addDeleteListener(new Listener());
 		this.theView.addSendListener(new Listener());
 		this.theView.addReplyListener(new Listener());
+
 	}
+	
+	/**
+	 * The Main starts the program
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		 try {
+	         // The OSName.java
+	         System.out.println(System.getProperty("os.name"));
+	         System.out.println(InetAddress.getLocalHost().getCanonicalHostName());
+
+	         // The MVC
+	         MessageGUI theView = new MessageGUI();
+	         Message theModel = new Message();
+	         Client theController = new Client(theView, theModel);
+	         theView.setVisible(true);
+
+	         String host = "$localhost";
+	         int port = 1099;
+	         // if (args.length >= 2) {
+	         // host = args[0];
+	         // port = args[1];
+	         // }
+
+	         InetAddress address = InetAddress.getByName(host);
+	         socket = new Socket(address, port);
+
+	         // Send the message to the server
+	         OutputStream os = socket.getOutputStream();
+	         OutputStreamWriter osw = new OutputStreamWriter(os);
+	         BufferedWriter bw = new BufferedWriter(osw);
+
+	         // String number = "2";
+	         //
+	         // String sendMessage = number + "\n";
+	         // bw.write(sendMessage);
+	         // bw.flush();
+	         // System.out.println("Message sent to the server : "+sendMessage);
+
+	         // Get the return message from the server
+	         InputStream is = socket.getInputStream();
+	         InputStreamReader isr = new InputStreamReader(is);
+	         System.out.println("Client obtained remote object reference to" + " the Server");
+	         //BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+	         BufferedReader br = new BufferedReader(isr);
+	         String message = br.readLine();
+	         System.out.println("Message received from the server : " + message);
+
+	         // System.setSecurityManager(new RMISecurityManager());
+	         // RMIClientGui rmiclient = new RMIClientGui(host, port);
+
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	     } finally {
+	         // Closing the socket
+	         try {
+	             socket.close();
+	         } catch (Exception e) {
+	             e.printStackTrace();
+	         }
+	     }
+	 }
 
 	/**
-	 * @author ericsandlin
-	 * listener class
+	 * @author ericsandlin listener class
 	 *
 	 */
 	class Listener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
-			
+
 			JTextField to, from, subject, date;
 
 			/*
@@ -96,8 +160,8 @@ public class Client {
 				 * This is for Deleting nodes
 				 */
 				if (e.getActionCommand().equals("Delete")) {
-					DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theView.tree
-							.getSelectionPath().getLastPathComponent();
+					DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theView.tree.getSelectionPath()
+							.getLastPathComponent();
 
 					if (selectedNode != theView.tree.getModel().getRoot()) {
 						DefaultTreeModel model = (DefaultTreeModel) theView.tree.getModel();
@@ -111,10 +175,10 @@ public class Client {
 					 */
 				} else if (e.getActionCommand().equals("Reply")) {
 
-					DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theView.tree
-							.getSelectionPath().getLastPathComponent();
+					DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) theView.tree.getSelectionPath()
+							.getLastPathComponent();
 
-					//DefaultMutableTreeNode newNode = new DefaultMutableTreeNode();
+					// DefaultMutableTreeNode newNode = new DefaultMutableTreeNode();
 
 					selectedNode.add(new DefaultMutableTreeNode(theView.getSubjectTextField().getText()));
 
@@ -139,69 +203,4 @@ public class Client {
 			}
 		}
 	}
-}
-
-class Main {
-
-    // socket object for
-    private static Socket socket;
-
-    public static void main(String[] args) {
-
-        try {
-            // The OSName.java
-            System.out.println(System.getProperty("os.name"));
-            System.out.println(InetAddress.getLocalHost().getCanonicalHostName());
-
-            // The MVC
-            MessageGUI theView = new MessageGUI();
-            Message theModel = new Message();
-            Client theController = new Client(theView, theModel);
-            theView.setVisible(true);
-
-            String host = "$localhost";
-            int port = 1099;
-            // if (args.length >= 2) {
-            // host = args[0];
-            // port = args[1];
-            // }
-
-            InetAddress address = InetAddress.getByName(host);
-            socket = new Socket(address, port);
-
-            // Send the message to the server
-            OutputStream os = socket.getOutputStream();
-            OutputStreamWriter osw = new OutputStreamWriter(os);
-            BufferedWriter bw = new BufferedWriter(osw);
-
-            // String number = "2";
-            //
-            // String sendMessage = number + "\n";
-            // bw.write(sendMessage);
-            // bw.flush();
-            // System.out.println("Message sent to the server : "+sendMessage);
-
-            // Get the return message from the server
-            InputStream is = socket.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            System.out.println("Client obtained remote object reference to" + " the Server");
-            //BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
-            BufferedReader br = new BufferedReader(isr);
-            String message = br.readLine();
-            System.out.println("Message received from the server : " + message);
-
-            // System.setSecurityManager(new RMISecurityManager());
-            // RMIClientGui rmiclient = new RMIClientGui(host, port);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Closing the socket
-            try {
-                socket.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package ser321.assign3.esandlin.server;
+package ser321.assign3.esandlin.src.server;
 
 import java.rmi.*;
 
